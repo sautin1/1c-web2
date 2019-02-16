@@ -4,8 +4,9 @@ let mongoClient = require("mongodb").MongoClient;
 let app = express();
 
 app.use(cors());
+app.use(express.static("../client"));
 
-app.get("/", function(request, response) {
+app.get("/main", function(request, response) {
     let name = request.query.name;
     let mood = request.query.mood;
     response.send("Hello, " + name + "! I am " + mood + " too");
@@ -26,5 +27,5 @@ mongoClient.connect("mongodb://localhost", function(err, client) {
     let humans = sandbox.collection("humans");
 
     performActions(humans, {name: "Andrew", age: 24}, {name: "Andrew"});
-    // app.listen(591);
+    app.listen(591);
 });

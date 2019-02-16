@@ -7,7 +7,7 @@ button.addEventListener("click", function() {
     let mood = inputMood.value;
 
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:591?name=" + name + "&mood=" + mood, true);
+    xhr.open("GET", "http://localhost:591/main?name=" + name + "&mood=" + mood, true);
     xhr.onreadystatechange = function() {
         if (this.readyState === this.DONE) {
             if (this.status !== 200) {
