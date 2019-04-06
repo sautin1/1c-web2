@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "4.16.3",
-    "mongodb": "3.0.11"
+    "mongodb": "3.0.11",
+    "vue-jwt-mongo": "1.3.6"
   }
 }

@@ -277,10 +277,78 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-581b6fd0", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-581b6fd0", __vue__options__)
+    hotAPI.reload("data-v-581b6fd0", __vue__options__)
   }
 })()}
-},{"vue":10,"vue-hot-reload-api":7}],5:[function(require,module,exports){
+},{"vue":17,"vue-hot-reload-api":13}],5:[function(require,module,exports){
+;(function(){
+"use strict";
+
+module.exports = {
+    mounted: function mounted() {
+        if (this.$auth.isLoggedIn()) {
+            this.$router.push("/feed");
+        } else {
+            this.$router.push("/login");
+        }
+    }
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('p',[_vm._v("Перенаправление...")])}
+__vue__options__.staticRenderFns = []
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-55edba89", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-55edba89", __vue__options__)
+  }
+})()}
+},{"vue":17,"vue-hot-reload-api":13}],6:[function(require,module,exports){
+;(function(){
+"use strict";
+
+module.exports = {
+    data: function data() {
+        return {
+            username: "",
+            password: ""
+        };
+    },
+    methods: {
+        login: function login() {
+            var promise = this.$auth.logIn(this.username, this.password);
+            promise.then(function () {
+                this.$router.push("/feed");
+            });
+            promise.catch(function (error) {
+                alert("Ошибка: " + error);
+            });
+        }
+    }
+};
+})()
+if (module.exports.__esModule) module.exports = module.exports.default
+var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
+if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"page"},[_c('div',{staticClass:"focus"},[_c('form',{staticClass:"focus_holder",on:{"keydown":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.login($event)}}},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.username),expression:"username"}],staticClass:"form-control",attrs:{"type":"text","placeholder":"Логин"},domProps:{"value":(_vm.username)},on:{"input":function($event){if($event.target.composing){ return; }_vm.username=$event.target.value}}}),_vm._v(" "),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.password),expression:"password"}],staticClass:"form-control",attrs:{"type":"password","placeholder":"Пароль"},domProps:{"value":(_vm.password)},on:{"input":function($event){if($event.target.composing){ return; }_vm.password=$event.target.value}}}),_vm._v(" "),_c('button',{staticClass:"btn btn-primary btn-block",attrs:{"type":"button"},on:{"click":_vm.login}},[_vm._v("\n                Войти!\n            ")]),_vm._v(" "),_c('router-link',{attrs:{"to":"/register"}},[_vm._v("Регистрация")])],1)])])}
+__vue__options__.staticRenderFns = []
+if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1f955da0", __vue__options__)
+  } else {
+    hotAPI.reload("data-v-1f955da0", __vue__options__)
+  }
+})()}
+},{"vue":17,"vue-hot-reload-api":13}],7:[function(require,module,exports){
 ;(function(){
 "use strict";
 
@@ -294,7 +362,18 @@ module.exports = {
     },
     methods: {
         register: function register() {
-            if (this.passwordA === this.passwordB) {}
+            if (this.passwordA === this.passwordB) {
+                var promise = this.$auth.register(this.username, this.passwordA);
+                promise.then(function () {
+                    console.log("Зарегистрирован!");
+                    this.$router.push("/login");
+                });
+                promise.catch(function (error) {
+                    alert("Ошибка: " + error);
+                });
+            } else {
+                alert("Пароли не совпадают!");
+            }
         }
     }
 };
@@ -314,20 +393,26 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
     hotAPI.reload("data-v-252b573c", __vue__options__)
   }
 })()}
-},{"vue":10,"vue-hot-reload-api":7}],6:[function(require,module,exports){
+},{"vue":17,"vue-hot-reload-api":13}],8:[function(require,module,exports){
 let Vue = require("vue");
 let VueResource = require("vue-resource");
 let VueRouter = require("vue-router");
+let VueJwtMongo = require("vue-jwt-mongo");
 
 let App = require("./components/app.vue");
 let Register = require("./components/register.vue");
+let Login = require("./components/login.vue");
+let Index = require("./components/index.vue");
 
 Vue.use(VueResource);
+Vue.use(VueJwtMongo.Client);
 Vue.use(VueRouter);
 
 let router = new VueRouter({
     routes: [
-        { path: "/register", component: Register }
+        { path: "/", component: Index },
+        { path: "/register", component: Register },
+        { path: "/login", component: Login }
     ]
 });
 
@@ -339,7 +424,288 @@ let vm = new Vue({
     }
 });
 
-},{"./components/app.vue":4,"./components/register.vue":5,"vue":10,"vue-resource":8,"vue-router":9}],7:[function(require,module,exports){
+},{"./components/app.vue":4,"./components/index.vue":5,"./components/login.vue":6,"./components/register.vue":7,"vue":17,"vue-jwt-mongo":14,"vue-resource":15,"vue-router":16}],9:[function(require,module,exports){
+/**
+ * The code was extracted from:
+ * https://github.com/davidchambers/Base64.js
+ */
+
+var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+function InvalidCharacterError(message) {
+  this.message = message;
+}
+
+InvalidCharacterError.prototype = new Error();
+InvalidCharacterError.prototype.name = 'InvalidCharacterError';
+
+function polyfill (input) {
+  var str = String(input).replace(/=+$/, '');
+  if (str.length % 4 == 1) {
+    throw new InvalidCharacterError("'atob' failed: The string to be decoded is not correctly encoded.");
+  }
+  for (
+    // initialize result and counters
+    var bc = 0, bs, buffer, idx = 0, output = '';
+    // get next character
+    buffer = str.charAt(idx++);
+    // character found in table? initialize bit storage and add its ascii value;
+    ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+      // and if not first of each 4 characters,
+      // convert the first 8 bits to one ascii character
+      bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
+  ) {
+    // try to find character in table (0-63, not found => -1)
+    buffer = chars.indexOf(buffer);
+  }
+  return output;
+}
+
+
+module.exports = typeof window !== 'undefined' && window.atob && window.atob.bind(window) || polyfill;
+
+},{}],10:[function(require,module,exports){
+var atob = require('./atob');
+
+function b64DecodeUnicode(str) {
+  return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+    var code = p.charCodeAt(0).toString(16).toUpperCase();
+    if (code.length < 2) {
+      code = '0' + code;
+    }
+    return '%' + code;
+  }));
+}
+
+module.exports = function(str) {
+  var output = str.replace(/-/g, "+").replace(/_/g, "/");
+  switch (output.length % 4) {
+    case 0:
+      break;
+    case 2:
+      output += "==";
+      break;
+    case 3:
+      output += "=";
+      break;
+    default:
+      throw "Illegal base64url string!";
+  }
+
+  try{
+    return b64DecodeUnicode(output);
+  } catch (err) {
+    return atob(output);
+  }
+};
+
+},{"./atob":9}],11:[function(require,module,exports){
+'use strict';
+
+var base64_url_decode = require('./base64_url_decode');
+
+function InvalidTokenError(message) {
+  this.message = message;
+}
+
+InvalidTokenError.prototype = new Error();
+InvalidTokenError.prototype.name = 'InvalidTokenError';
+
+module.exports = function (token,options) {
+  if (typeof token !== 'string') {
+    throw new InvalidTokenError('Invalid token specified');
+  }
+
+  options = options || {};
+  var pos = options.header === true ? 0 : 1;
+  try {
+    return JSON.parse(base64_url_decode(token.split('.')[pos]));
+  } catch (e) {
+    throw new InvalidTokenError('Invalid token specified: ' + e.message);
+  }
+};
+
+module.exports.InvalidTokenError = InvalidTokenError;
+
+},{"./base64_url_decode":10}],12:[function(require,module,exports){
+/*!
+ * @name JavaScript/NodeJS Merge v1.2.1
+ * @author yeikos
+ * @repository https://github.com/yeikos/js.merge
+
+ * Copyright 2014 yeikos - MIT license
+ * https://raw.github.com/yeikos/js.merge/master/LICENSE
+ */
+
+;(function(isNode) {
+
+	/**
+	 * Merge one or more objects 
+	 * @param bool? clone
+	 * @param mixed,... arguments
+	 * @return object
+	 */
+
+	var Public = function(clone) {
+
+		return merge(clone === true, false, arguments);
+
+	}, publicName = 'merge';
+
+	/**
+	 * Merge two or more objects recursively 
+	 * @param bool? clone
+	 * @param mixed,... arguments
+	 * @return object
+	 */
+
+	Public.recursive = function(clone) {
+
+		return merge(clone === true, true, arguments);
+
+	};
+
+	/**
+	 * Clone the input removing any reference
+	 * @param mixed input
+	 * @return mixed
+	 */
+
+	Public.clone = function(input) {
+
+		var output = input,
+			type = typeOf(input),
+			index, size;
+
+		if (type === 'array') {
+
+			output = [];
+			size = input.length;
+
+			for (index=0;index<size;++index)
+
+				output[index] = Public.clone(input[index]);
+
+		} else if (type === 'object') {
+
+			output = {};
+
+			for (index in input)
+
+				output[index] = Public.clone(input[index]);
+
+		}
+
+		return output;
+
+	};
+
+	/**
+	 * Merge two objects recursively
+	 * @param mixed input
+	 * @param mixed extend
+	 * @return mixed
+	 */
+
+	function merge_recursive(base, extend) {
+
+		if (typeOf(base) !== 'object')
+
+			return extend;
+
+		for (var key in extend) {
+
+			if (typeOf(base[key]) === 'object' && typeOf(extend[key]) === 'object') {
+
+				base[key] = merge_recursive(base[key], extend[key]);
+
+			} else {
+
+				base[key] = extend[key];
+
+			}
+
+		}
+
+		return base;
+
+	}
+
+	/**
+	 * Merge two or more objects
+	 * @param bool clone
+	 * @param bool recursive
+	 * @param array argv
+	 * @return object
+	 */
+
+	function merge(clone, recursive, argv) {
+
+		var result = argv[0],
+			size = argv.length;
+
+		if (clone || typeOf(result) !== 'object')
+
+			result = {};
+
+		for (var index=0;index<size;++index) {
+
+			var item = argv[index],
+
+				type = typeOf(item);
+
+			if (type !== 'object') continue;
+
+			for (var key in item) {
+
+				if (key === '__proto__') continue;
+
+				var sitem = clone ? Public.clone(item[key]) : item[key];
+
+				if (recursive) {
+
+					result[key] = merge_recursive(result[key], sitem);
+
+				} else {
+
+					result[key] = sitem;
+
+				}
+
+			}
+
+		}
+
+		return result;
+
+	}
+
+	/**
+	 * Get type of variable
+	 * @param mixed input
+	 * @return string
+	 *
+	 * @see http://jsperf.com/typeofvar
+	 */
+
+	function typeOf(input) {
+
+		return ({}).toString.call(input).slice(8, -1).toLowerCase();
+
+	}
+
+	if (isNode) {
+
+		module.exports = Public;
+
+	} else {
+
+		window[publicName] = Public;
+
+	}
+
+})(typeof module === 'object' && module && typeof module.exports === 'object' && module.exports);
+},{}],13:[function(require,module,exports){
 var Vue // late bind
 var version
 var map = Object.create(null)
@@ -612,7 +978,103 @@ function patchScopedSlots (instance) {
   }
 }
 
-},{}],8:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
+'use strict';
+
+var merge = require('merge');
+var jwtDecode = require('jwt-decode');
+
+function installVuePlugin(Vue, options) {
+    var sToMs = function sToMs(seconds) {
+        return seconds * 1000;
+    };
+
+    var defaultOptions = {
+        registerEndpoint: '/auth/register',
+        loginEndpoint: '/auth/login',
+        refreshEndpoint: '/auth/refresh',
+        storageKey: 'jsonwebtoken',
+        bearerLexem: 'Bearer '
+    };
+
+    options = merge(defaultOptions, options);
+
+    var Token = new function () {
+        var _this = this;
+
+        this.get = function () {
+            return localStorage.getItem(options.storageKey);
+        };
+
+        this.set = function (value) {
+            localStorage.setItem(options.storageKey, value);
+        };
+
+        this.remove = function () {
+            localStorage.removeItem(options.storageKey);
+        };
+
+        this.valid = function () {
+            var token = _this.get();
+            if (token !== null) {
+                var tokenExpMs = sToMs(jwtDecode(token).exp);
+                var nowMs = new Date().getTime();
+                return tokenExpMs - nowMs > sToMs(60);
+            } else {
+                return false;
+            }
+        };
+    }();
+
+    function Auth(instance) {
+        this.register = function (username, password) {
+            return instance.$http.post(options.registerEndpoint, { username: username, password: password }).bind(instance);
+        };
+
+        this.logIn = function (username, password) {
+            return instance.$http.post(options.loginEndpoint, { username: username, password: password }).bind(instance).then(function (response) {
+                Token.set(response.body);
+            });
+        };
+
+        this.refresh = function () {
+            return instance.$http.post(options.refreshEndpoint, null, { bearer: true }).bind(instance).then(function (response) {
+                Token.set(response.body);
+            });
+        };
+
+        this.logOut = Token.remove;
+        this.isLoggedIn = Token.valid;
+        this.getToken = Token.get;
+    }
+
+    Object.defineProperty(Vue.prototype, '$auth', {
+        get: function get() {
+            return new Auth(this);
+        }
+    });
+
+    Vue.http.interceptors.push(function (request, next) {
+        if (request.bearer) {
+            if (!Token.valid()) {
+                return next(request.respondWith(null, {
+                    status: 401,
+                    statusText: 'Request demands JWT but user was not logged in'
+                }));
+            } else {
+                request.headers.set('Authorization', options.bearerLexem + Token.get());
+                return next();
+            }
+        } else {
+            return next();
+        }
+    });
+}
+
+module.exports = {
+    Client: installVuePlugin
+};
+},{"jwt-decode":11,"merge":12}],15:[function(require,module,exports){
 /*!
  * vue-resource v1.5.1
  * https://github.com/pagekit/vue-resource
@@ -2171,7 +2633,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 module.exports = plugin;
 
-},{"got":1}],9:[function(require,module,exports){
+},{"got":1}],16:[function(require,module,exports){
 (function (process){
 /**
   * vue-router v3.0.1
@@ -4800,7 +5262,7 @@ if (inBrowser && window.Vue) {
 module.exports = VueRouter;
 
 }).call(this,require('_process'))
-},{"_process":2}],10:[function(require,module,exports){
+},{"_process":2}],17:[function(require,module,exports){
 (function (process,global,setImmediate){
 /*!
  * Vue.js v2.5.16
@@ -12838,4 +13300,4 @@ if (inBrowser) {
 module.exports = Vue;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("timers").setImmediate)
-},{"_process":2,"timers":3}]},{},[6]);
+},{"_process":2,"timers":3}]},{},[8]);
