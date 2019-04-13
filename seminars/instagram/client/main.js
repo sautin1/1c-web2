@@ -7,6 +7,8 @@ let App = require("./components/app.vue");
 let Register = require("./components/register.vue");
 let Login = require("./components/login.vue");
 let Index = require("./components/index.vue");
+let Feed = require("./components/feed.vue");
+let Upload = require("./components/upload.vue");
 
 Vue.use(VueResource);
 Vue.use(VueJwtMongo.Client);
@@ -16,7 +18,9 @@ let router = new VueRouter({
     routes: [
         { path: "/", component: Index },
         { path: "/register", component: Register },
-        { path: "/login", component: Login }
+        { path: "/login", component: Login },
+        { path: "/feed", component: Feed },
+        { path: "/upload", component: Upload }
     ]
 });
 
